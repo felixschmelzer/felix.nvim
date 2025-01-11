@@ -15,6 +15,12 @@ return {
   },
   opts = {
     filesystem = {
+      follow_current_file = {
+        enabled = true, -- Automatically reveal the current file
+      },
+      filtered_items = {
+        hide_dotfiles = false,
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',
