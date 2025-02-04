@@ -126,6 +126,15 @@ vim.opt.undofile = true
 -- Automatically read file if changed outside of Neovim
 -- useful for git operations, etc.
 vim.opt.autoread = true
+-- Automatically reload buffers after some events
+vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'CursorHoldI', 'FocusGained' }, {
+  command = "if mode() != 'c' | checktime | endif",
+  pattern = { '*' },
+})
+vim.api.nvim_create_autocmd(
+  { 'FileChangedShellPost' },
+  { command = 'echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None', pattern = { '*' } }
+)
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
