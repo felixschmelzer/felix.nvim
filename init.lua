@@ -394,7 +394,14 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            hidden = true, -- This will show hidden files
+            no_ignore = true, -- This will show ignored files
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' }, -- Exclude .git directory
+          },
+        },
+
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),

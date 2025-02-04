@@ -19,7 +19,7 @@ return {
         enabled = true, -- Automatically reveal the current file
       },
       filtered_items = {
-        hide_dotfiles = false,
+        visible = true,
       },
       window = {
         mappings = {
