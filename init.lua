@@ -398,7 +398,7 @@ require('lazy').setup({
           find_files = {
             hidden = true, -- This will show hidden files
             no_ignore = true, -- This will show ignored files
-            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' }, -- Exclude .git directory
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' }, -- Exclude .git and node_modules
           },
         },
 
