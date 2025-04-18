@@ -136,6 +136,11 @@ vim.api.nvim_create_autocmd(
   { command = 'echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None', pattern = { '*' } }
 )
 
+-- Enable Autosave on focus lost or buffer leave
+vim.api.nvim_create_autocmd({ 'FocusLost', 'BufLeave' }, {
+  command = 'wa',
+})
+
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -409,6 +414,16 @@ require('lazy').setup({
             no_ignore = true, -- This will show ignored files
             find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' }, -- Exclude .git and node_modules
           },
+          lsp_references = {
+            layout_strategy = 'vertical', -- switch from horizontal to vertical
+            layout_config = {
+              height = 0.95, -- overall height (95% of the screen)
+              width = 0.95, -- overall width
+            },
+            path_display = { 'relative' }, -- show the relative path
+            -- preview_title can be set if you’d like to override the default title
+            preview_title = '',
+          },
         },
 
         extensions = {
@@ -561,6 +576,9 @@ require('lazy').setup({
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+
+          -- Show the signature help for the function call under your cursor. with this you can see which args aruments are available for a fuction
+          map('<leader>cf', vim.lsp.buf.signature_help, '[C]all [S]ignature help (function args)')
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
@@ -828,6 +846,7 @@ require('lazy').setup({
               luasnip.expand_or_jump()
             end
           end, { 'i', 's' }),
+
           ['<C-h>'] = cmp.mapping(function()
             if luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
