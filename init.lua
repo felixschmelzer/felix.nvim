@@ -137,9 +137,19 @@ vim.api.nvim_create_autocmd(
 )
 
 -- Enable Autosave on focus lost or buffer leave
+--vim.api.nvim_create_autocmd({ 'FocusLost', 'BufLeave' }, {
+--  command = 'wa',
+--})
 vim.api.nvim_create_autocmd({ 'FocusLost', 'BufLeave' }, {
-  command = 'wa',
+  group = vim.api.nvim_create_augroup('autosave', { clear = true }),
+  callback = function()
+    -- only write “normal” buffers which are actually modified (so we do not try to save when harpoon list gets closed)
+    if vim.bo.buftype == '' and vim.bo.modified then
+      vim.cmd('silent! write')
+    end
+  end,
 })
+
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
