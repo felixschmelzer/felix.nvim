@@ -10,7 +10,7 @@ return {
     config = function()
       ------------------------------------------------------------------
       -- core setup -----------------------------------------------------
-      ---<C-S-P>---------------------------------------------------------------
+      ------------------------------------------------------------------
       local harpoon = require 'harpoon'
 
       harpoon:setup {
@@ -20,8 +20,9 @@ return {
         },
       }
 
-      ------------------------------------------------------------------
+      ----------------------------------------------------------------
       -- basic key-maps -------------------------------------------------
+      ------------------------------------------------------------------
       local add_desc = 'Harpoon: add file'
       local menu_desc = 'Harpoon: quick-menu'
       local jump_desc = function(n)
@@ -56,10 +57,10 @@ return {
       end, { desc = jump_desc(4) })
 
       -- previous / next
-      vim.keymap.set('n', '<C-S-P>', function()
+      vim.keymap.set('n', '<leader>p', function()
         harpoon:list():prev()
       end, { desc = nav_desc 'prev' })
-      vim.keymap.set('n', '<C-S-N>', function()
+      vim.keymap.set('n', '<leader>n', function()
         harpoon:list():next()
       end, { desc = nav_desc 'next' })
 
@@ -82,7 +83,7 @@ return {
           :find()
       end
 
-      vim.keymap.set('n', '<leader>st', function()
+      vim.keymap.set('n', '<leader>e', function()
         toggle_telescope(harpoon:list())
       end, { desc = 'Harpoon: Telescope picker' })
     end,
