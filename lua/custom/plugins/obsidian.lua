@@ -44,7 +44,5 @@ return {
       -- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
       -- vim.ui.open(url) -- need Neovim 0.10.0+
     end,
-
-    -- TODO follow link function
   },
 }

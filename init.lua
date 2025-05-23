@@ -693,6 +693,20 @@ require('lazy').setup({
             },
           },
         },
+
+        --        texlab = {
+        --          -- you can omit the settings table completely if you’re happy with texlab’s defaults,
+        --          -- but most people want “save → latexmk build” plus forward-search:
+        --          settings = {
+        --            texlab = {
+        --              build = { onSave = false }, -- let VimTeX handle compilation
+        --              forwardSearch = { -- keep manual forward-search
+        --                executable = 'zathura',
+        --                args = { '--synctex-forward', '%l:1:%f', '%p' },
+        --              },
+        --            },
+        --          },
+        --        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -764,10 +778,14 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
+        python = { 'isort', 'black' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        latex = { 'tex-fmt' },
+        tex = { 'tex-fmt' },
       },
     },
   },
@@ -964,7 +982,8 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = { 'ruby', 'latex', 'bibtex' },
+        disable = { 'latex', 'bibtex' },
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
