@@ -225,7 +225,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- <leader>tl  → cycle between: en_us → de_de → en_us,de_de
 
 -- Enable spell-checking by default for English and German
-vim.opt.spell     = true
+vim.opt.spell = true
 vim.opt.spelllang = 'en_us,de_de'
 
 -- toggle spelling on/off
@@ -944,6 +944,7 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'copilot' },
           { name = 'path' },
+          -- { name = 'emoji' },
         },
       }
     end,
