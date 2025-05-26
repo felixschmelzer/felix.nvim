@@ -6,22 +6,23 @@ return {
     init = function()
       vim.g.vimtex_view_general_viewer = 'zathura'
 
-      vim.g.vimtex_syntax_conceal_disable = 1
+      -- vim.g.vimtex_syntax_conceal_disable = 1
 
       vim.g.vimtex_syntax_conceal = {
         item = 1, -- \item → bullet (•)
         macros = 1, -- \textbf, \emph → styled text
         accents = 1, -- \alpha → α, etc.  (optional)
+        spacing = 0,
       }
 
-      -- Make sure 'conceallevel' is set *per* TeX buffer
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = { 'tex', 'plaintex' },
-        callback = function()
-          vim.wo.conceallevel = 1 -- show replacement chars
-          vim.wo.concealcursor = '' -- only hide when cursor not in the line
-        end,
-      })
+      vim.g.vimtex_compiler_method = 'latexmk'
+
+      -- Auto-start the compiler on first open
+      -- vim.api.nvim_create_autocmd('User', {
+      --   pattern = 'VimtexEventInitPost',
+      --   once = true,
+      --   command = 'VimtexCompile', -- equivalent to hitting `\ll`
+      -- })
     end,
   },
 }
