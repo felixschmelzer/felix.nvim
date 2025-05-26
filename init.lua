@@ -220,6 +220,44 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- config for spell-checking
+-- <leader>ts  → toggle spell on/off
+-- <leader>tl  → cycle between: en_us → de_de → en_us,de_de
+
+-- Enable spell-checking by default for English and German
+vim.opt.spell     = true
+vim.opt.spelllang = 'en_us,de_de'
+
+-- toggle spelling on/off
+vim.keymap.set('n', '<leader>ts', function()
+  vim.opt.spell = not vim.opt.spell:get()
+  vim.notify('Spell-check ' .. (vim.opt.spell:get() and 'enabled' or 'disabled'))
+end, { desc = '[T]oggle [S]pell-check' })
+
+local spell_langs = { 'en_us', 'de_de', 'en_us,de_de' }
+
+vim.keymap.set('n', '<leader>tl', function()
+  -- read the *string* value of &spelllang
+  local cur = vim.o.spelllang or ''
+
+  -- find current index (default to 1)
+  local idx = 1
+  for i, lang in ipairs(spell_langs) do
+    if cur == lang then
+      idx = i
+      break
+    end
+  end
+
+  -- next slot
+  local next_idx = (idx % #spell_langs) + 1
+  local next_lang = spell_langs[next_idx]
+
+  -- apply it
+  vim.o.spelllang = next_lang
+  vim.notify('Spell language → ' .. next_lang)
+end, { desc = '[T]oggle [L]anguage (en/de/en+de)' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
