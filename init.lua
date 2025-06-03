@@ -467,14 +467,12 @@ require('lazy').setup({
             find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*', '--glob', '!**/node_modules/*' }, -- Exclude .git and node_modules
           },
           lsp_references = {
-            layout_strategy = 'vertical', -- switch from horizontal to vertical
-            layout_config = {
-              height = 0.95, -- overall height (95% of the screen)
-              width = 0.95, -- overall width
-            },
-            path_display = { 'relative' }, -- show the relative path
-            -- preview_title can be set if you’d like to override the default title
-            preview_title = '',
+            show_line = false, -- hide the code snippet column
+            fname_width = 80, -- widen the file-path column (optional)
+            -- any other per-picker opts you already have…
+            layout_strategy = 'vertical',
+            layout_config = { height = 0.95, width = 0.95 },
+            path_display = { 'filename_first' }, -- nice extra: puts filename first
           },
         },
 
