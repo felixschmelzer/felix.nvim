@@ -194,8 +194,40 @@ vim.opt.scrolloff = 20
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Diagnostic keymaps
+------------------------
+-- Diagnostic keymaps --
+------------------------
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Configure how diagnostics are displayed
+vim.diagnostic.config {
+  virtual_text = { prefix = '●', spacing = 2 },
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+}
+
+-- toggle inline diagnostics (virtual_text)
+local diag_inline_enabled = true
+local function toggle_inline_diagnostics()
+  diag_inline_enabled = not diag_inline_enabled
+  vim.diagnostic.config { virtual_text = diag_inline_enabled }
+  vim.notify('Diagnostics inline ' .. (diag_inline_enabled and 'ON' or 'OFF'))
+end
+
+-- show diagnostic float automatically on CursorHold (no insert mode)
+vim.api.nvim_create_autocmd('CursorHold', {
+  callback = function()
+    -- only if there is a diagnostic under cursor
+    if #vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }) > 0 then
+      vim.diagnostic.open_float(nil, { focus = false, scope = 'line', border = 'rounded', source = 'if_many' })
+    end
+  end,
+})
+
+-- keymaps
+vim.keymap.set('n', '<leader>td', toggle_inline_diagnostics, { desc = '[T]oggle [D]iagnostics inline' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Prev diagnostic' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -703,7 +735,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {},
         pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -822,6 +854,7 @@ require('lazy').setup({
         typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
         latex = { 'tex-fmt' },
         tex = { 'tex-fmt' },
+        go = { 'goimport', 'gofumpt' },
       },
     },
   },
