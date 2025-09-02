@@ -55,6 +55,9 @@ return {
       vim.keymap.set('n', '<leader>4', function()
         harpoon:list():select(4)
       end, { desc = jump_desc(4) })
+      vim.keymap.set('n', '<leader>5', function()
+        harpoon:list():select(5)
+      end, { desc = jump_desc(5) })
 
       -- previous / next
       vim.keymap.set('n', '<leader>p', function()
