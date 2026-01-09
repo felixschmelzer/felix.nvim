@@ -98,6 +98,8 @@ return {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
         'debugpy',
+        'java-debug-adapter',
+        'java-test',
       },
     }
 
@@ -124,20 +126,20 @@ return {
     }
 
     -- Change breakpoint icons
-    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    -- for type, icon in pairs(breakpoint_icons) do
-    --   local tp = 'Dap' .. type
-    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-    -- end
+    vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+    vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+    local breakpoint_icons = vim.g.have_nerd_font
+        and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+      or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+    for type, icon in pairs(breakpoint_icons) do
+      local tp = 'Dap' .. type
+      local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+      vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+    end
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    dap.listeners.before.event_exited['dapui_config'] = dapui.close
+    -- dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+    -- dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install golang specific config
     require('dap-go').setup {
@@ -148,9 +150,22 @@ return {
       },
     }
 
-    local mason_registry = require 'mason-registry'
-    local debugpy_python = mason_registry.get_package('debugpy'):get_install_path() .. '/venv/bin/python'
+    -- Use Mason's standard install path for debugpy (no mason-registry:get_install_path)
+    local mason_data = vim.fn.stdpath 'data'
+    local debugpy_python = table.concat({
+      mason_data,
+      'mason',
+      'packages',
+      'debugpy',
+      'venv',
+      'bin',
+      'python',
+    }, '/')
 
-    require('dap-python').setup(debugpy_python)
+    if vim.fn.executable(debugpy_python) == 1 then
+      require('dap-python').setup(debugpy_python)
+    else
+      vim.notify('debugpy not found. Install it with :MasonInstall debugpy', vim.log.levels.WARN)
+    end
   end,
 }
