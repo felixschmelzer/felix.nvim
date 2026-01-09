@@ -1,14 +1,3 @@
--- util: read OpenAI key from macOS Keychain
-local function get_openai_api_key()
-  local handle = io.popen 'security find-generic-password -s openai-api-key -w 2>/dev/null'
-  if not handle then
-    return nil
-  end
-  local result = handle:read '*a'
-  handle:close()
-  return result and result:gsub('%s+', '') or nil
-end
-
 return {
   {
     'yetone/avante.nvim',
@@ -23,18 +12,32 @@ return {
       providers = {
         openai = {
           endpoint = 'https://api.openai.com/v1',
-          model = 'gpt-4.1',
+          model = 'gpt-4o-mini', -- or "gpt-4.1-mini"
           timeout = 30000,
 
-          -- ✅ Avante supports cmd:... for api_key_name
-          api_key_name = 'cmd:security find-generic-password -s openai-api-key -w 2>/dev/null',
-
           extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 16384,
+            temperature = 0.3,
+            max_tokens = 2048, -- try 1024–4096; lower = fewer TPM spikes
           },
+
+          -- ✅ Avante supports cmd:... for api_key_name
+          api_key_name = 'cmd:security find-generic-password -a "$USER" -s OPENAI_API_KEY -w 2>/dev/null',
         },
       },
+    },
+
+    -- ✅ Ctrl+g shortcuts (+ which-key descriptions)
+    keys = {
+      { '<C-g>', desc = '+avante' },
+
+      { '<C-g>a', '<cmd>AvanteAsk<cr>', desc = 'Ask' },
+      { '<C-g>c', '<cmd>AvanteChat<cr>', desc = 'Chat' },
+      { '<C-g>n', '<cmd>AvanteChatNew<cr>', desc = 'New chat' },
+      { '<C-g>t', '<cmd>AvanteToggle<cr>', desc = 'Toggle UI' },
+      { '<C-g>r', '<cmd>AvanteRefresh<cr>', desc = 'Refresh' },
+
+      -- handy with visual selections
+      { '<C-g>e', '<cmd>AvanteEdit<cr>', desc = 'Edit selection', mode = { 'n', 'v' } },
     },
 
     dependencies = {
