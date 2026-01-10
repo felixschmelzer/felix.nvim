@@ -33,7 +33,7 @@ return {
       end
 
       -- add current file
-      vim.keymap.set('n', '<leader>a', function()
+      vim.keymap.set('n', '<leader>m', function()
         harpoon:list():add()
       end, { desc = add_desc })
 
